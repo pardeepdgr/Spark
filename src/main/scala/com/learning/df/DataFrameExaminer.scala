@@ -12,4 +12,11 @@ object DataFrameExaminer extends App {
     .option("inferSchema", true)
     .load("src/main/resources/airlines/flights.csv")
   dfFromCsv.printSchema()
+
+  dfFromCsv.select("origin", "destination").show()
+  import session.implicits._
+  val totalTimeDF = dfFromCsv
+    .select($"air_time" - $"departure_delay" + $"arrival_delay")
+    .withColumnRenamed("((air_time - departure_delay) + arrival_delay)", "total_time")
+    .show()
 }
