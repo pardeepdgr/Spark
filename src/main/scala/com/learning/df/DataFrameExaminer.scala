@@ -16,6 +16,7 @@ object DataFrameExaminer extends App {
   // OR //
   flightDf.show(5)
   flightDf.show(false)
+  val columns: Array[String] = flightDf.columns
 
   flightDf.select("origin", "destination")
   flightDf.drop("air_time", "arrival_delay", "departure_delay")
@@ -27,8 +28,8 @@ object DataFrameExaminer extends App {
 
   flightDf.filter("destination = 'LAX'")
   // OR //
-  flightDf.filter(flightDf("destination")==="LAX")
-  flightDf.filter(flightDf("destination").isin("LAX","JFK"))
+  flightDf.filter(flightDf("destination") === "LAX")
+  flightDf.filter(flightDf("destination").isin("LAX", "JFK"))
 
   flightDf.groupBy("flight_number").count()
   flightDf.groupBy("flight_number").sum("air_time")
@@ -36,5 +37,5 @@ object DataFrameExaminer extends App {
   import org.apache.spark.sql.functions._
   flightDf.orderBy(desc("air_time"))
 
-  flightDf.stat.crosstab("origin","distance")
+  flightDf.stat.crosstab("origin", "distance")
 }
