@@ -1,7 +1,7 @@
 package com.learning.df
 
-import com.learning.df.helper.DataFrameAssistant
-import com.learning.df.helper.DataFrameCreator
+import com.learning.helper.DataFrameAssistant
+import com.learning.helper.DataFrameCreator
 import com.learning.spark.SparkInstance.{session, sparkContext}
 import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.util.LongAccumulator

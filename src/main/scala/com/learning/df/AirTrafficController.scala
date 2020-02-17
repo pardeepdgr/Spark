@@ -1,6 +1,6 @@
 package com.learning.df
 
-import com.learning.df.helper.DataFrameCreator
+import com.learning.helper.DataFrameCreator
 import com.learning.spark.SparkInstance.session
 
 object AirTrafficController {
