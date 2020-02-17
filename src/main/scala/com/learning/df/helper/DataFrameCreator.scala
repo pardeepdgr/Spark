@@ -11,4 +11,8 @@ object DataFrameCreator {
       .option("inferSchema", true)
       .load(path)
   }
+
+  def fromRange(session: SparkSession, range: Long) = {
+    session.range(range)
+  }
 }
