@@ -27,4 +27,12 @@ object DataFrameAssistant {
     import org.apache.spark.sql.functions.broadcast
     fatDf.join(broadcast(leanDf), columnName)
   }
+
+  def registerDataframeAsView(dataFrame: DataFrame, viewName: String): Unit = {
+    dataFrame.createOrReplaceTempView(viewName)
+  }
+
+  def registerDataframeAsViewForAllSparkSessionInCluster(dataFrame: DataFrame, viewName: String): Unit = {
+    dataFrame.createGlobalTempView(viewName)
+  }
 }
