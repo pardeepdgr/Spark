@@ -22,6 +22,8 @@ object DataFrameAssistant {
   }
 
   def broadcastJoin(fatDf: DataFrame, leanDf: DataFrame, columnName: String): DataFrame = {
+    if(fatDf.count() < leanDf.count())
+      throw new IllegalArgumentException
     import org.apache.spark.sql.functions.broadcast
     fatDf.join(broadcast(leanDf), columnName)
   }
