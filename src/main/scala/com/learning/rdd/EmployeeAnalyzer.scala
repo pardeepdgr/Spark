@@ -19,7 +19,7 @@ object EmployeeAnalyzer extends App {
   val data = Array(Row("1", "Name", "Address", "000-000-0000", 5, 1))
 
   val rddFromRows: RDD[Row] = RDDCreator.fromRows(sparkContext, data)
-  val rddFromCsv = RDDCreator.fromCsv(sparkContext, AIRLINE_DATASET_PATH)
+  val rddFromCsv: RDD[String] = RDDCreator.fromCsv(sparkContext, AIRLINE_DATASET_PATH)
 
   rddFromRows.count()
   rddFromRows.first()
