@@ -9,13 +9,13 @@ object AirTrafficController {
   def main(args: Array[String]): Unit = {
 
     val flightDf = DataFrameCreator.fromCsv(session, FLIGHT_DATASET_PATH)
+    val columns: Array[String] = flightDf.columns
     flightDf.printSchema()
     flightDf.describe()
+    flightDf.show(false)
     flightDf.limit(5).show()
     // OR //
     flightDf.show(5)
-    flightDf.show(false)
-    val columns: Array[String] = flightDf.columns
 
     flightDf.select("origin", "destination")
     flightDf.drop("air_time", "arrival_delay", "departure_delay")
