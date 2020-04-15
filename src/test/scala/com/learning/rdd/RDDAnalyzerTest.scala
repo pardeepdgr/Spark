@@ -8,14 +8,14 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row}
 
-class EmployeeAnalyzerTest extends TestBootstrap {
+class RDDAnalyzerTest extends TestBootstrap {
 
   private val AIRLINES = "src/test/resources/airlines/airlines.csv"
 
   private var airlines: RDD[String] = _
 
   before {
-    init("EmployeeAnalyzerTest", "local")
+    init("RDDAnalyzerTest", "local")
     airlines = fromCsv(session.sparkContext, AIRLINES)
   }
 
