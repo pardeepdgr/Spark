@@ -11,7 +11,7 @@ object FlightAnalyzer {
     val flights: DataFrame = DataFrameCreator.fromCsv(session, FLIGHT_DATASET_PATH)
     val viewName = "flights"
 
-    DataFrameAssistant.registerDataframeAsView(flights, viewName)
+    DataFrameAssistant.registerDataFrameAsView(flights, viewName)
 
     val sqlMixedWithDf: DataFrame = sqlContext.sql("select flight_number, destination, distance from flights")
     sqlMixedWithDf.filter(sqlMixedWithDf("distance") > 2500)
