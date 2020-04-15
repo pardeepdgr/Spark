@@ -10,7 +10,7 @@ import org.apache.spark.sql.{DataFrame, Row}
 
 class EmployeeAnalyzerTest extends TestBootstrap {
 
-  private val AIRLINES = "src/main/resources/airlines/airlines.csv"
+  private val AIRLINES = "src/test/resources/airlines/airlines.csv"
 
   private var airlines: RDD[String] = _
 
