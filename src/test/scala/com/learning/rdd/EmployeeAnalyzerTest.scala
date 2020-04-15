@@ -2,8 +2,10 @@ package com.learning.rdd
 
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
+import com.learning.helper.DataFrameCreator.fromRdd
 import com.learning.helper.RDDCreator.{fromCsv, fromRows}
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row}
 
 class EmployeeAnalyzerTest extends TestBootstrap {
@@ -52,6 +54,22 @@ class EmployeeAnalyzerTest extends TestBootstrap {
   it should "fetch first 4 records with header of an RDD" in {
     val records: Array[String] = airlines.take(5)
     records.foreach(println)
+  }
+
+  it should "create a data frame from an RDD" in {
+    val data = Array(Row("1", "Name", "Address", "000-000-0000", 5, 1))
+    val schema = new StructType()
+      .add(StructField("id", StringType, true))
+      .add(StructField("name", StringType, true))
+      .add(StructField("address", StringType, true))
+      .add(StructField("contact", StringType, true))
+      .add(StructField("empid", IntegerType, true))
+      .add(StructField("deptid", IntegerType, true))
+
+    val rdd: RDD[Row] = fromRows(session.sparkContext, data)
+
+    val df: DataFrame = fromRdd(session, rdd, schema)
+    assert(df.count() == 1, "DataFrame isn't get created")
   }
 
   after {
