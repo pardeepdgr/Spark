@@ -3,6 +3,7 @@ package com.learning.df
 import base.TestBootstrap
 import base.TestHelper.readCSV
 import base.TestSetup.{init, kill, session}
+import com.learning.df.AirTrafficController.getActualAirTime
 import org.apache.spark.sql.DataFrame
 
 class AirTrafficControllerTest extends TestBootstrap {
@@ -45,6 +46,20 @@ class AirTrafficControllerTest extends TestBootstrap {
 
   it should "select non-duplicate origin of all flights" in {
     flights.select("origin").distinct().show()
+  }
+
+  it should "get actual air time of all flights" in {
+    getActualAirTime(flights).show()
+  }
+
+  it should "filter all flight which are going to LAX" in {
+    flights.filter("destination = 'LAX'").show()
+    // OR //
+    flights.filter(flights("destination") === "LAX").show()
+  }
+
+  it should "filter all flight which are going to LAX and JFK" in {
+    flights.filter(flights("destination").isin("LAX", "JFK")).show()
   }
 
   after {
