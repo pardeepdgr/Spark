@@ -28,6 +28,10 @@ object DataFrameAssistant {
     fatDf.join(broadcast(leanDf), columnName)
   }
 
+  def castColumnTo(df: DataFrame, columnName: String, datatype: String): DataFrame = {
+    df.withColumn(columnName, df(columnName).cast(datatype))
+  }
+
   def registerDataframeAsView(dataFrame: DataFrame, viewName: String): Unit = {
     dataFrame.createOrReplaceTempView(viewName)
   }

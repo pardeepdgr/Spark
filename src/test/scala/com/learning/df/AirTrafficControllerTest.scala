@@ -4,6 +4,7 @@ import base.TestBootstrap
 import base.TestHelper.readCSV
 import base.TestSetup.{init, kill, session}
 import com.learning.df.AirTrafficController.getActualAirTime
+import com.learning.helper.DataFrameAssistant.castColumnTo
 import org.apache.spark.sql.DataFrame
 
 class AirTrafficControllerTest extends TestBootstrap {
@@ -60,6 +61,24 @@ class AirTrafficControllerTest extends TestBootstrap {
 
   it should "filter all flight which are going to LAX and JFK" in {
     flights.filter(flights("destination").isin("LAX", "JFK")).show()
+  }
+
+  it should "find number of rounds made by each flight" in {
+    flights.groupBy("flight_number").count().show()
+  }
+
+  it should "find total air time taken by each flight" in {
+    castColumnTo(flights, "air_time", "Decimal(5,2)")
+      .groupBy("flight_number").sum("air_time").show()
+  }
+
+  it should "print in the descending order of airtime taken by each flight" in {
+    import org.apache.spark.sql.functions.desc
+    flights.orderBy(desc("air_time")).show()
+  }
+
+  it should "create contingency table of origin and distance" in {
+    flights.stat.crosstab("origin", "distance").show()
   }
 
   after {
