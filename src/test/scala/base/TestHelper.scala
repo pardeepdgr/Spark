@@ -8,6 +8,7 @@ object TestHelper {
     session.read
       .format("csv")
       .option("header", "true")
+      .option("inferSchema", true)
       .load(path)
   }
 
