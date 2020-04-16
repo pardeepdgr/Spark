@@ -55,6 +55,15 @@ class SoccerTalentScoutTest extends TestBootstrap {
     topStrikersDetail.show()
   }
 
+  it should "get number of top striker who are tall" in {
+    val vitalStats: DataFrame = getAverageOfVitalStats(playerAttributes)
+    val strikers: DataFrame = getWeightedStats(vitalStats)
+    val topStrikers: DataFrame = getTopStrikers(strikers)
+    val topStrikersDetail: DataFrame = naturalJoin(players, topStrikers, "player_api_id")
+    val tallStrikersCount = getTallTopStrikers(topStrikersDetail)
+    assert(tallStrikersCount.value == 207, "Tall top strikers count mismatch")
+  }
+
   after {
     kill
   }
