@@ -1,10 +1,10 @@
 package com.learning.df
 
 import base.TestBootstrap
-import base.TestHelper.readCSV
 import base.TestSetup.{init, kill, session}
 import com.learning.df.SoccerTalentScout._
 import com.learning.helper.DataFrameAssistant.naturalJoin
+import com.learning.helper.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 
 class SoccerTalentScoutTest extends TestBootstrap {
@@ -17,8 +17,8 @@ class SoccerTalentScoutTest extends TestBootstrap {
 
   before {
     init("SoccerTalentScoutTest", "local")
-    players = readCSV(session, PLAYER)
-    playerAttributes = readCSV(session, PLAYER_ATTRIBUTE)
+    players = fromCsv(session, PLAYER)
+    playerAttributes = fromCsv(session, PLAYER_ATTRIBUTE)
   }
 
   it should "calculate average of all vital stats of all players" in {

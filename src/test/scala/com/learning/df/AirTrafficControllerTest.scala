@@ -1,10 +1,10 @@
 package com.learning.df
 
 import base.TestBootstrap
-import base.TestHelper.readCSV
 import base.TestSetup.{init, kill, session}
 import com.learning.df.AirTrafficController.getActualAirTime
 import com.learning.helper.DataFrameAssistant.castColumnTo
+import com.learning.helper.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 
 class AirTrafficControllerTest extends TestBootstrap {
@@ -16,8 +16,8 @@ class AirTrafficControllerTest extends TestBootstrap {
 
   before {
     init("AirTrafficControllerTest", "local")
-    flights = readCSV(session, FLIGHTS)
-    airlines = readCSV(session, AIRLINES)
+    flights = fromCsv(session, FLIGHTS)
+    airlines = fromCsv(session, AIRLINES)
   }
 
   it should "print schema of flights in tree format" in {
