@@ -4,7 +4,7 @@ import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
 import com.learning.helper.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
-import window.CustomWindow
+import com.learning.window.CustomWindow
 
 class CustomWindowsTest extends TestBootstrap {
 

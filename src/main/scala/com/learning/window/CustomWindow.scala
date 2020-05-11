@@ -1,4 +1,4 @@
-package window
+package com.learning.window
 
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
