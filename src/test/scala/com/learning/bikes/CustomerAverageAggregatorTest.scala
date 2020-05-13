@@ -32,6 +32,11 @@ class CustomerAverageAggregatorTest extends TestBootstrap {
     dailyAggregatedCustomers.show(100)
   }
 
+  it should "calculate weekly averages of aggregated counts of each customer" in {
+    val weeklyAggregatedCustomers = aggregator.findWeeklyAggregatedCustomers(bikes)
+    weeklyAggregatedCustomers.show(100)
+  }
+
   after {
     kill
   }
