@@ -4,11 +4,9 @@ import com.learning.bikes.enumeration.Bike.Derived._
 import com.learning.bikes.enumeration.Bike.{CustomerNumber, Timestamp}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{col, count, dayofyear, hour, weekofyear}
+import org.apache.spark.sql.functions.{col, count, dayofyear, hour, month, weekofyear}
 
 class CustomerAverageAggregator {
-
-  private val DATE = "date"
 
   def findHourlyAggregatedCustomers(bikes: DataFrame): DataFrame = {
 
@@ -41,6 +39,17 @@ class CustomerAverageAggregator {
     bikes
       .withColumn(Week, weekofyear(col(Timestamp)))
       .withColumn(WeeklyAggCustomer, count(CustomerNumber).over(windowSpec))
+  }
+
+  def findMonthlyAggregatedCustomers(bikes: DataFrame): DataFrame = {
+
+    val windowSpec = Window
+      .partitionBy(CustomerNumber, Month)
+      .orderBy(Timestamp)
+
+    bikes
+      .withColumn(Month, month(col(Timestamp)))
+      .withColumn(MonthlyAggCustomer, count(CustomerNumber).over(windowSpec))
   }
 
 }

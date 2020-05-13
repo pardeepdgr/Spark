@@ -16,5 +16,7 @@ object Bike extends Enumeration {
     val DailyAggCustomer = Value("daily_agg_customer").toString
     val Week = Value("week").toString
     val WeeklyAggCustomer = Value("weekly_agg_customer").toString
+    val Month = Value("month").toString
+    val MonthlyAggCustomer = Value("monthly_agg_customer").toString
   }
 }

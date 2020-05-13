@@ -10,6 +10,7 @@ class CustomerAverageAggregatorTest extends TestBootstrap {
 
   private val BIKES = "src/test/resources/bikes/raw/bikes.csv"
   private val HOURLY_AGG_CUSTOMER = "src/test/resources/bikes/transformed/hourly_agg.csv"
+  private val MONTHLY_AGG_CUSTOMER = "src/test/resources/bikes/transformed/monthly_agg.csv"
 
   private var bikes: DataFrame = _
   private var aggregator: CustomerAverageAggregator = _
@@ -35,6 +36,13 @@ class CustomerAverageAggregatorTest extends TestBootstrap {
   it should "calculate weekly averages of aggregated counts of each customer" in {
     val weeklyAggregatedCustomers = aggregator.findWeeklyAggregatedCustomers(bikes)
     weeklyAggregatedCustomers.show(100)
+  }
+
+  it should "calculate monthly averages of aggregated counts of each customer" in {
+    val monthlyAggregatedCustomers = aggregator.findMonthlyAggregatedCustomers(bikes)
+
+    val isSameContent = compareContent(fromCsv(session, MONTHLY_AGG_CUSTOMER), monthlyAggregatedCustomers)
+    assert(isSameContent, "Content isn't same")
   }
 
   after {
