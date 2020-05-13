@@ -9,8 +9,10 @@ import org.apache.spark.sql.DataFrame
 class CustomerAverageAggregatorTest extends TestBootstrap {
 
   private val BIKES = "src/test/resources/bikes/raw/bikes.csv"
+  private val DAILY_AGG_CUSTOMER = "src/test/resources/bikes/transformed/daily_agg.csv"
   private val HOURLY_AGG_CUSTOMER = "src/test/resources/bikes/transformed/hourly_agg.csv"
   private val MONTHLY_AGG_CUSTOMER = "src/test/resources/bikes/transformed/monthly_agg.csv"
+  private val WEEKLY_AGG_CUSTOMER = "src/test/resources/bikes/transformed/weekly_agg.csv"
 
   private var bikes: DataFrame = _
   private var aggregator: CustomerAverageAggregator = _
@@ -25,24 +27,28 @@ class CustomerAverageAggregatorTest extends TestBootstrap {
     val hourlyAggregatedCustomers = aggregator.findHourlyAggregatedCustomers(bikes)
 
     val isSameContent = compareContent(fromCsv(session, HOURLY_AGG_CUSTOMER), hourlyAggregatedCustomers)
-    assert(isSameContent, "Content isn't same")
+    assert(isSameContent, "Daily aggregated customer data mismatch")
   }
 
   it should "calculate daily averages of aggregated counts of each customer" in {
     val dailyAggregatedCustomers = aggregator.findDailyAggregatedCustomers(bikes)
-    dailyAggregatedCustomers.show(100)
+
+    val isSameContent = compareContent(fromCsv(session, DAILY_AGG_CUSTOMER), dailyAggregatedCustomers)
+    assert(isSameContent, "Daily aggregated customer data mismatch")
   }
 
   it should "calculate weekly averages of aggregated counts of each customer" in {
     val weeklyAggregatedCustomers = aggregator.findWeeklyAggregatedCustomers(bikes)
-    weeklyAggregatedCustomers.show(100)
+
+    val isSameContent = compareContent(fromCsv(session, WEEKLY_AGG_CUSTOMER), weeklyAggregatedCustomers)
+    assert(isSameContent, "Weekly aggregated customer data mismatch")
   }
 
   it should "calculate monthly averages of aggregated counts of each customer" in {
     val monthlyAggregatedCustomers = aggregator.findMonthlyAggregatedCustomers(bikes)
 
     val isSameContent = compareContent(fromCsv(session, MONTHLY_AGG_CUSTOMER), monthlyAggregatedCustomers)
-    assert(isSameContent, "Content isn't same")
+    assert(isSameContent, "Monthly aggregated customer data mismatch")
   }
 
   after {
