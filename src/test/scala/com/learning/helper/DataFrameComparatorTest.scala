@@ -39,17 +39,17 @@ class DataFrameComparatorTest extends TestBootstrap {
 
   it should "return false if data types are not same in both data frames" in {
     val isColumnsTypeSame = !compareDataTypes(airlines, players)
-    assert(isColumnsTypeSame, "Columns name are not same")
+    assert(isColumnsTypeSame, "Columns name are same")
   }
 
   it should "return true if content is same in both data frames" in {
-    val isColumnsTypeSame = compareContent(airlines, airlines)
-    assert(isColumnsTypeSame, "Content of both data frames is same")
+    val isSameContent = compareContent(airlines, airlines)
+    assert(isSameContent, "Content of both data frames is not same")
   }
 
   it should "return false if content is not same in data frames" in {
-    val isColumnsTypeSame = !compareContent(airlines, airports)
-    assert(isColumnsTypeSame, "Content of both data frames is same")
+    val isSameContent = !compareContent(airlines, airports)
+    assert(isSameContent, "Content of both data frames is same")
   }
 
   after {

@@ -4,7 +4,6 @@ import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
 import com.learning.helper.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
-import com.learning.window.CustomWindow
 
 class CustomWindowsTest extends TestBootstrap {
 
@@ -17,15 +16,15 @@ class CustomWindowsTest extends TestBootstrap {
   }
 
   it should "get category wise rank for all products in descending price" in {
-    CustomWindow.getCategorizedRank(products);
+    CustomWindow.getCategorizedRank(products)
   }
 
   it should "get moving average price for current and previous product" in {
-    CustomWindow.getMovingAverage(products);
+    CustomWindow.getMovingAverage(products)
   }
 
   it should "find how much product is cheaper from its costliest product in the category" in {
-    CustomWindow.findPriceDifferenceFromCostliestInCategory(products);
+    CustomWindow.findPriceDifferenceFromCostliestInCategory(products)
   }
 
   after {
