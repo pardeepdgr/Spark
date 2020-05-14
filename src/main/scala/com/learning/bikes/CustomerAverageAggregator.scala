@@ -4,7 +4,7 @@ import com.learning.bikes.enumeration.Bike.Derived._
 import com.learning.bikes.enumeration.Bike.{CustomerNumber, Timestamp}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{col, count, dayofyear, hour, month, weekofyear}
+import org.apache.spark.sql.functions.{concat, col, count, dayofyear, hour, month, weekofyear, year}
 
 class CustomerAverageAggregator {
 
@@ -15,7 +15,7 @@ class CustomerAverageAggregator {
       .orderBy(Timestamp)
 
     bikes
-      .withColumn(Hour, hour(col(Timestamp)))
+      .withColumn(Hour, concat(year(col(Timestamp)), hour(col(Timestamp))))
       .withColumn(HourlyAggCustomer, count(CustomerNumber).over(windowSpec))
   }
 
@@ -26,7 +26,7 @@ class CustomerAverageAggregator {
       .orderBy(Timestamp)
 
     bikes
-      .withColumn(Day, dayofyear(col(Timestamp)))
+      .withColumn(Day, concat(year(col(Timestamp)), dayofyear(col(Timestamp))))
       .withColumn(DailyAggCustomer, count(CustomerNumber).over(windowSpec))
   }
 
@@ -37,7 +37,7 @@ class CustomerAverageAggregator {
       .orderBy(Timestamp)
 
     bikes
-      .withColumn(Week, weekofyear(col(Timestamp)))
+      .withColumn(Week, concat(year(col(Timestamp)), weekofyear(col(Timestamp))))
       .withColumn(WeeklyAggCustomer, count(CustomerNumber).over(windowSpec))
   }
 
@@ -48,7 +48,7 @@ class CustomerAverageAggregator {
       .orderBy(Timestamp)
 
     bikes
-      .withColumn(Month, month(col(Timestamp)))
+      .withColumn(Month, concat(year(col(Timestamp)), month(col(Timestamp))))
       .withColumn(MonthlyAggCustomer, count(CustomerNumber).over(windowSpec))
   }
 
