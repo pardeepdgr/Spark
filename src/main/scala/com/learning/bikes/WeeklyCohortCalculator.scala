@@ -74,7 +74,7 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
       records += record + DELIMITER + lastWeekCustomers.count()
     }
 
-    DataFrameCreator.fromStrings(session, records, DELIMITER, getDynamicSchema(numberOfWeeks))
+    DataFrameCreator.fromStrings(session, records, getDynamicSchema(numberOfWeeks))
   }
 
   private def getWeekNumber(date: Date): Int = {

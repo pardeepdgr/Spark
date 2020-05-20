@@ -7,6 +7,7 @@ import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 import scala.collection.mutable.ArrayBuffer
 
 object DataFrameCreator {
+  private val DELIMITER = ","
 
   def fromRdd(session: SparkSession, rdd: RDD[Row], schema: StructType): DataFrame = {
     session.createDataFrame(rdd, schema)
@@ -24,12 +25,11 @@ object DataFrameCreator {
     session.range(range)
   }
 
-  //TODO: make it dynamic
-  def fromStrings(session: SparkSession, records: ArrayBuffer[String], delimiter: String, schema: StructType): DataFrame = {
+  def fromStrings(session: SparkSession, records: ArrayBuffer[String], schema: StructType): DataFrame = {
     var rows = Array.empty[Row]
     for (record <- records) {
-      val cells = record.split(delimiter)
-      rows = rows :+ Row(cells(0), cells(1), cells(2), cells(3))
+      val cells = record.split(DELIMITER)
+      rows = rows :+ Row(cells:_*)
     }
 
     val rdd = RDDCreator.fromRows(session.sparkContext, rows)
