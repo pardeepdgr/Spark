@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.learning.bikes.enumeration.Bike.CustomerNumber
-import com.learning.bikes.enumeration.Bike.Derived.Week
+import com.learning.bikes.enumeration.Bike.Derived.{Week, WeekNumber}
 import com.learning.helper.DataFrameCreator
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
@@ -12,8 +12,10 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import scala.collection.mutable.ArrayBuffer
 
 class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
+  private val YEAR_PATTERN = "YYYY"
+  private val WEEK_PATTERN = "w"
   private val DELIMITER = ","
-  private val NULL = ",null"
+  private val EMPTY_PLACEHOLDER = ",null"
 
   def calculate(date: Date, numberOfWeeks: Int): DataFrame = {
     val weekNumber = getWeekNumber(date)
@@ -43,7 +45,7 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
         val recurrentCustomersCount = nextWeekCustomers.count() - recurrentCustomers.count()
 
         var record = (weekNumber + i).toString
-        for (_ <- 0 until i) record = record + NULL
+        for (_ <- 0 until i) record = record + EMPTY_PLACEHOLDER
         record = record + DELIMITER + currentWeekCustomers.count() + DELIMITER + recurrentCustomersCount
 
         if ((i + 2) < numberOfWeeks) {
@@ -70,7 +72,7 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
         .distinct()
 
       var record = (weekNumber + numberOfWeeks - 1).toString
-      for (_ <- 0 until numberOfWeeks - 1) record = record + NULL
+      for (_ <- 0 until numberOfWeeks - 1) record = record + EMPTY_PLACEHOLDER
       records += record + DELIMITER + lastWeekCustomers.count()
     }
 
@@ -78,23 +80,23 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
   }
 
   private def getWeekNumber(date: Date): Int = {
-    val yearFormat = new SimpleDateFormat("YYYY")
+    val yearFormat = new SimpleDateFormat(YEAR_PATTERN)
     val year: Int = Integer.parseInt(yearFormat.format(date))
 
-    val weekFormat = new SimpleDateFormat("w")
+    val weekFormat = new SimpleDateFormat(WEEK_PATTERN)
     val week: Int = Integer.parseInt(weekFormat.format(date))
 
     Integer.parseInt(year + "" + week)
   }
 
   private def getDynamicSchema(numberOfWeeks: Int): StructType = {
-    var fields = Array[StructField]()
+    var fields = ArrayBuffer[StructField]()
 
-    fields = fields :+(StructField("week_num", StringType, true))
-    for (i <- 1 until numberOfWeeks + 1)
-      fields = fields :+ StructField("week" + i, StringType, true)
+    fields = fields :+ StructField(WeekNumber, StringType, false)
+    for (weekNumber <- 1 until numberOfWeeks + 1)
+      fields = fields :+ StructField(Week + weekNumber, StringType, true)
 
-    new StructType(fields)
+    new StructType(fields.toArray)
   }
 
 }

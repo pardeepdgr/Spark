@@ -26,13 +26,13 @@ object DataFrameCreator {
   }
 
   def fromStrings(session: SparkSession, records: ArrayBuffer[String], schema: StructType): DataFrame = {
-    var rows = Array.empty[Row]
+    var rows = ArrayBuffer.empty[Row]
     for (record <- records) {
       val cells = record.split(DELIMITER)
       rows = rows :+ Row(cells:_*)
     }
 
-    val rdd = RDDCreator.fromRows(session.sparkContext, rows)
+    val rdd = RDDCreator.fromRows(session.sparkContext, rows.toArray)
     fromRdd(session, rdd, schema)
   }
 
