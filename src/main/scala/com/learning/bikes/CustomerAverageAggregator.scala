@@ -15,7 +15,7 @@ class CustomerAverageAggregator {
       .orderBy(Timestamp)
 
     bikes
-      .withColumn(Hour, concat(year(col(Timestamp)), hour(col(Timestamp))))
+      .withColumn(Hour, concat(year(col(Timestamp)), dayofyear(col(Timestamp)), hour(col(Timestamp))))
       .withColumn(HourlyAggCustomer, count(CustomerNumber).over(windowSpec))
   }
 
