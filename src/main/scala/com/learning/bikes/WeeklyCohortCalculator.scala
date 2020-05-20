@@ -87,13 +87,14 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
     Integer.parseInt(year + "" + week)
   }
 
-  //TODO: make it dynamic
   private def getDynamicSchema(numberOfWeeks: Int): StructType = {
-    new StructType()
-      .add(StructField("week_num", StringType, true))
-      .add(StructField("week1", StringType, true))
-      .add(StructField("week2", StringType, true))
-      .add(StructField("week3", StringType, true))
+    var fields = Array[StructField]()
+
+    fields = fields :+(StructField("week_num", StringType, true))
+    for (i <- 1 until numberOfWeeks + 1)
+      fields = fields :+ StructField("week" + i, StringType, true)
+
+    new StructType(fields)
   }
 
 }
