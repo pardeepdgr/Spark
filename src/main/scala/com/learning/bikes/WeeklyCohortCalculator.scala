@@ -1,5 +1,8 @@
 package com.learning.bikes
 
+import java.text.SimpleDateFormat
+import java.util.Date
+
 import com.learning.bikes.enumeration.Bike.CustomerNumber
 import com.learning.bikes.enumeration.Bike.Derived.Week
 import com.learning.helper.DataFrameCreator
@@ -11,6 +14,11 @@ import scala.collection.mutable.ArrayBuffer
 class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
   private val DELIMITER = ","
   private val NULL = ",null"
+
+  def calculate(date: Date, numberOfWeeks: Int): DataFrame = {
+    val weekNumber = getWeekNumber(date)
+    this.calculate(weekNumber, numberOfWeeks)
+  }
 
   def calculate(weekNumber: Int, numberOfWeeks: Int): DataFrame = {
     var records = ArrayBuffer[String]()
@@ -67,6 +75,16 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
     }
 
     DataFrameCreator.fromStrings(session, records, DELIMITER, getDynamicSchema(numberOfWeeks))
+  }
+
+  private def getWeekNumber(date: Date): Int = {
+    val yearFormat = new SimpleDateFormat("YYYY")
+    val year: Int = Integer.parseInt(yearFormat.format(date))
+
+    val weekFormat = new SimpleDateFormat("w")
+    val week: Int = Integer.parseInt(weekFormat.format(date))
+
+    Integer.parseInt(year + "" + week)
   }
 
   //TODO: make it dynamic
