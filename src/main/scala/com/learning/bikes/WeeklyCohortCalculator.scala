@@ -23,58 +23,12 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
   }
 
   def calculate(weekNumber: Int, numberOfWeeks: Int): DataFrame = {
-    var records = ArrayBuffer[String]()
     val aggregator = new CustomerAverageAggregator()
     val bikesWithWeek = aggregator.findWeeklyAggregatedCustomers(bikes)
 
-    getCohortAnalysis
-    getLastRecordOfCohortAnalysis
-
-    def getCohortAnalysis = {
-      for (i <- 0 until numberOfWeeks - 1) {
-        val currentWeekCustomers = bikesWithWeek
-          .filter(bikesWithWeek(Week) === (weekNumber + i))
-          .select(CustomerNumber)
-          .distinct()
-        val nextWeekCustomers = bikesWithWeek
-          .filter(bikesWithWeek(Week) === (weekNumber + i + 1))
-          .select(CustomerNumber)
-          .distinct()
-
-        val recurrentCustomers = nextWeekCustomers.except(currentWeekCustomers)
-        val recurrentCustomersCount = nextWeekCustomers.count() - recurrentCustomers.count()
-
-        var record = (weekNumber + i).toString
-        for (_ <- 0 until i) record = record + EMPTY_PLACEHOLDER
-        record = record + DELIMITER + currentWeekCustomers.count() + DELIMITER + recurrentCustomersCount
-
-        if ((i + 2) < numberOfWeeks) {
-          for (j <- (i + 2) to numberOfWeeks - 1) {
-            val fartherWeekCustomers = bikesWithWeek
-              .filter(bikesWithWeek(Week) === (weekNumber + j))
-              .select(CustomerNumber)
-              .distinct()
-
-            val fartherRecurrentCustomers = fartherWeekCustomers.except(currentWeekCustomers)
-            val fartherRecurrentCustomersCount = fartherWeekCustomers.count() - fartherRecurrentCustomers.count()
-
-            record = record + DELIMITER + fartherRecurrentCustomersCount
-          }
-        }
-        records += record
-      }
-    }
-
-    def getLastRecordOfCohortAnalysis = {
-      val lastWeekCustomers = bikesWithWeek
-        .filter(bikesWithWeek(Week) === (weekNumber + numberOfWeeks - 1))
-        .select(CustomerNumber)
-        .distinct()
-
-      var record = (weekNumber + numberOfWeeks - 1).toString
-      for (_ <- 0 until numberOfWeeks - 1) record = record + EMPTY_PLACEHOLDER
-      records += record + DELIMITER + lastWeekCustomers.count()
-    }
+    var records = ArrayBuffer[String]()
+    records = computeCohortAnalysis(weekNumber, numberOfWeeks, bikesWithWeek)
+    records = records ++ computeLastRecord(weekNumber, numberOfWeeks, bikesWithWeek)
 
     DataFrameCreator.fromStrings(session, records, getDynamicSchema(numberOfWeeks))
   }
@@ -87,6 +41,50 @@ class WeeklyCohortCalculator(session: SparkSession, bikes: DataFrame) {
     val week: Int = Integer.parseInt(weekFormat.format(date))
 
     Integer.parseInt(year + "" + week)
+  }
+
+  private def computeCohortAnalysis(weekNumber: Int, numberOfWeeks: Int, bikesWithWeek: DataFrame): ArrayBuffer[String] = {
+    var records = ArrayBuffer[String]()
+
+    for (i <- 0 until numberOfWeeks - 1) {
+      val currentWeekCustomers = bikesWithWeek
+        .filter(bikesWithWeek(Week) === (weekNumber + i)).select(CustomerNumber).distinct()
+      val nextWeekCustomers = bikesWithWeek
+        .filter(bikesWithWeek(Week) === (weekNumber + i + 1)).select(CustomerNumber).distinct()
+
+      val recurrentCustomers = nextWeekCustomers.except(currentWeekCustomers)
+      val recurrentCustomersCount = nextWeekCustomers.count() - recurrentCustomers.count()
+
+      var record = (weekNumber + i).toString
+      for (_ <- 0 until i) record = record + EMPTY_PLACEHOLDER
+      record = record + DELIMITER + currentWeekCustomers.count() + DELIMITER + recurrentCustomersCount
+
+      if ((i + 2) < numberOfWeeks)
+        for (j <- (i + 2) to numberOfWeeks - 1) {
+          val fartherWeekCustomers = bikesWithWeek
+            .filter(bikesWithWeek(Week) === (weekNumber + j)).select(CustomerNumber).distinct()
+
+          val fartherRecurrentCustomers = fartherWeekCustomers.except(currentWeekCustomers)
+          val fartherRecurrentCustomersCount = fartherWeekCustomers.count() - fartherRecurrentCustomers.count()
+
+          record = record + DELIMITER + fartherRecurrentCustomersCount
+        }
+      records = records :+ record
+    }
+    records
+  }
+
+  private def computeLastRecord(weekNumber: Int, numberOfWeeks: Int, bikesWithWeek: DataFrame): ArrayBuffer[String] = {
+    val lastWeekCustomers = bikesWithWeek
+      .filter(bikesWithWeek(Week) === (weekNumber + numberOfWeeks - 1))
+      .select(CustomerNumber)
+      .distinct()
+
+    var records = ArrayBuffer[String]()
+    var record = (weekNumber + numberOfWeeks - 1).toString
+    for (_ <- 0 until numberOfWeeks - 1) record = record + EMPTY_PLACEHOLDER
+    records = records :+ (record + DELIMITER + lastWeekCustomers.count())
+    records
   }
 
   private def getDynamicSchema(numberOfWeeks: Int): StructType = {
