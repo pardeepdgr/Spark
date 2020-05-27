@@ -15,10 +15,9 @@ object DataFrameCreator {
 
   def fromCsv(session: SparkSession, path: String): DataFrame = {
     session.read
-      .format("csv")
       .option("header", true)
       .option("inferSchema", true)
-      .load(path)
+      .csv(path)
   }
 
   def fromRange(session: SparkSession, range: Long): Dataset[java.lang.Long] = {
