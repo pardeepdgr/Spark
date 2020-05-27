@@ -20,6 +20,12 @@ object DataFrameCreator {
       .csv(path)
   }
 
+  def fromJson(session: SparkSession, path: String): DataFrame = {
+    session.read
+      .option("multiline", "true")
+      .json(path)
+  }
+
   def fromRange(session: SparkSession, range: Long): Dataset[java.lang.Long] = {
     session.range(range)
   }
