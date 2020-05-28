@@ -2,15 +2,13 @@ package com.learning.window
 
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.avg
-import org.apache.spark.sql.functions.desc
-import org.apache.spark.sql.functions.max
-import org.apache.spark.sql.functions.rank
+import org.apache.spark.sql.functions.{avg, col, desc, lag, max, rank}
 
 object CustomWindow {
 
   private val CATEGORY = "Category"
   private val PRICE = "Price"
+  private val PRODUCT = "Product"
 
   def getCategorizedRank(products: DataFrame): DataFrame = {
 
@@ -45,6 +43,18 @@ object CustomWindow {
 
     products
       .withColumn("cheaper_than_costliest_in_category", max(PRICE).over(windowSpec) - products(PRICE))
+  }
+
+  def findDuplicateProducts(products: DataFrame): DataFrame = {
+
+    val windowSpec = Window
+        .partitionBy(PRODUCT)
+      .orderBy(desc(PRODUCT))
+
+    products
+      .withColumn("prev_products", lag(PRODUCT, 1).over(windowSpec))
+      .filter(col(PRODUCT) === col("prev_products"))
+      .drop(col("prev_products"))
   }
 
 }

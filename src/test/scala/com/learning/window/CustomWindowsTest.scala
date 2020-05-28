@@ -27,6 +27,10 @@ class CustomWindowsTest extends TestBootstrap {
     CustomWindow.findPriceDifferenceFromCostliestInCategory(products)
   }
 
+  it should "find duplicate products" in {
+    CustomWindow.findDuplicateProducts(products)
+  }
+
   after {
     kill
   }
