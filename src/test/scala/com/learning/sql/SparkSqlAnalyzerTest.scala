@@ -2,7 +2,6 @@ package com.learning.sql
 
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
-import com.learning.helper.DataFrameAssistant.registerDataFrameAsView
 import com.learning.helper.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 
@@ -12,17 +11,18 @@ class SparkSqlAnalyzerTest extends TestBootstrap {
   private var flights: DataFrame = _
 
   before {
-    init("AirTrafficControllerTest", "local")
+    init("SparkSqlAnalyzerTest", "local")
     flights = fromCsv(session, FLIGHTS)
   }
 
-  it should "get all flight which fly more than 2500 using SparkSQL" in {
-    val VIEW_NAME = "flights"
-    val QUERY = "select flight_number, destination, distance from flights"
+  it should "get all flights which fly more than 2500" in {
+    val df = SparkSqlAnalyzer(session).registerDataFrameAsViewForCurrentSession(flights)
+    assert(df.count() == 9337)
+  }
 
-    registerDataFrameAsView(flights, VIEW_NAME)
-    val df: DataFrame = session.sqlContext.sql(QUERY)
-    df.filter(df("distance") > 2500)
+  it should "get all flights which has flown from JFK" in {
+    val df = SparkSqlAnalyzer(session).registerDataFrameAsViewForAllSessions(flights)
+    assert(df.count() == 8070)
   }
 
   after {

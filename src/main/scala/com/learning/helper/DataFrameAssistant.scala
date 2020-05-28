@@ -32,11 +32,4 @@ object DataFrameAssistant {
     df.withColumn(columnName, df(columnName).cast(datatype))
   }
 
-  def registerDataFrameAsView(dataFrame: DataFrame, viewName: String): Unit = {
-    dataFrame.createOrReplaceTempView(viewName)
-  }
-
-  def registerDataFrameAsViewForAllSparkSessionInCluster(dataFrame: DataFrame, viewName: String): Unit = {
-    dataFrame.createGlobalTempView(viewName)
-  }
 }
