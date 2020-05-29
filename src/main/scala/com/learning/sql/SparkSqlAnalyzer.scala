@@ -23,7 +23,7 @@ case class SparkSqlAnalyzer(session: SparkSession) {
     dataFrame.createOrReplaceGlobalTempView(VIEW_NAME)
 
     session.sqlContext.sql(QUERY)
-      .filter(col("origin") === lit("JFK"))
+      .filter(col("origin") =!= lit("JFK"))
   }
 
 }

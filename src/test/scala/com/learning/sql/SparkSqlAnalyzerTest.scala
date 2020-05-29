@@ -20,9 +20,9 @@ class SparkSqlAnalyzerTest extends TestBootstrap {
     assert(df.count() == 9337)
   }
 
-  it should "get all flights which has flown from JFK" in {
+  it should "get all flights which hasn't flown from JFK" in {
     val df = SparkSqlAnalyzer(session).registerDataFrameAsViewForAllSessions(flights)
-    assert(df.count() == 8070)
+    assert(df.count() == 468811)
   }
 
   after {
