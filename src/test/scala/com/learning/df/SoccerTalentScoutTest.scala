@@ -3,7 +3,7 @@ package com.learning.df
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
 import com.learning.df.SoccerTalentScout._
-import com.learning.helper.DataFrameAssistant.naturalJoin
+import com.learning.helper.Joiner.naturalJoin
 import com.learning.helper.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 
