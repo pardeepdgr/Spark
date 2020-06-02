@@ -17,7 +17,7 @@ object CustomWindow {
       .orderBy(desc(PRICE))
 
     products
-      .na.drop("all") // by default it's "any" if no args passed; "all" means all-columns in a row is null
+      .na.drop("all") // "all" means where every columns in a row is null remove it
       .withColumn("rank", rank.over(windowSpec))
   }
 
@@ -32,14 +32,15 @@ object CustomWindow {
       .rowsBetween(PREVIOUS_ROW, CURRENT_ROW)
 
     products
-      .na.drop()
+      .na.drop() // if no args passed then by default it's "any" which means wherever null is remove that row
       .withColumn("avg_price", avg(PRICE).over(windowSpec))
   }
 
   def findPriceDifferenceFromCostliestInCategory(products: DataFrame): DataFrame = {
+
     val cleansedProducts = products
-      .na.fill("Mobile") // automatically infer column-type and replace null for all string type columns
-      .na.fill(0) // replace null for all number type columns with 0
+      .na.fill("Mobile") // auto-infer column-type then replaces null for all string-columns with Mobile
+      .na.fill(0) // replaces null for all number-columns with 0
 
     val windowSpec = Window
       .partitionBy(CATEGORY)
@@ -50,6 +51,8 @@ object CustomWindow {
       .withColumn("cheaper_than_costliest_in_category", max(PRICE).over(windowSpec) - cleansedProducts(PRICE))
   }
 
+  private val TEMP_COL = "prev_products"
+
   def findDuplicateProducts(products: DataFrame): DataFrame = {
 
     val windowSpec = Window
@@ -57,9 +60,9 @@ object CustomWindow {
       .orderBy(desc(PRODUCT))
 
     products
-      .withColumn("prev_products", lag(PRODUCT, 1).over(windowSpec))
-      .filter(col(PRODUCT) === col("prev_products"))
-      .drop(col("prev_products"))
+      .withColumn(TEMP_COL, lag(PRODUCT, 1).over(windowSpec))
+      .filter(col(PRODUCT) === col(TEMP_COL))
+      .drop(col(TEMP_COL))
   }
 
 }
