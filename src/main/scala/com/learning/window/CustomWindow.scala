@@ -35,20 +35,23 @@ object CustomWindow {
   }
 
   def findPriceDifferenceFromCostliestInCategory(products: DataFrame): DataFrame = {
+    val allProducts = products
+      .na.fill("Mobile") // automatically infer column-type and replace null for all string type columns
+      .na.fill(0) // replace null for all number type columns with 0
 
     val windowSpec = Window
       .partitionBy(CATEGORY)
       .orderBy(desc(PRICE))
       .rangeBetween(Int.MinValue, Int.MaxValue)
 
-    products
-      .withColumn("cheaper_than_costliest_in_category", max(PRICE).over(windowSpec) - products(PRICE))
+    allProducts
+      .withColumn("cheaper_than_costliest_in_category", max(PRICE).over(windowSpec) - allProducts(PRICE))
   }
 
   def findDuplicateProducts(products: DataFrame): DataFrame = {
 
     val windowSpec = Window
-        .partitionBy(PRODUCT)
+      .partitionBy(PRODUCT)
       .orderBy(desc(PRODUCT))
 
     products
