@@ -1,6 +1,6 @@
 package com.learning.word_counter
 
-import com.learning.spark.SparkInstance.session
+import com.learning.SparkInstance.session
 
 object WordCounter extends App {
   val SPACE = " "
