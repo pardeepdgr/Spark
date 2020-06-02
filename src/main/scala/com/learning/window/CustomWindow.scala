@@ -1,8 +1,9 @@
 package com.learning.window
 
+import com.learning.bikes.enumeration.Bike.{CustomerNumber, Timestamp}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{avg, col, desc, lag, max, rank}
+import org.apache.spark.sql.functions.{avg, col, desc, lag, max, rank, window}
 
 object CustomWindow {
 
@@ -63,6 +64,17 @@ object CustomWindow {
       .withColumn(TEMP_COL, lag(PRODUCT, 1).over(windowSpec))
       .filter(col(PRODUCT) === col(TEMP_COL))
       .drop(col(TEMP_COL))
+  }
+
+  private val BUCKET = "bucket"
+
+  def timeWindowBucketing(bikes: DataFrame): DataFrame = {
+
+    bikes
+      .withColumn(BUCKET, window(col(Timestamp), "1 days", "60 minutes", "1 minutes"))
+      .orderBy(BUCKET)
+      .groupBy(BUCKET, CustomerNumber)
+      .count()
   }
 
 }
