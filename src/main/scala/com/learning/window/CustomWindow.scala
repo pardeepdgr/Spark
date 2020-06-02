@@ -3,7 +3,7 @@ package com.learning.window
 import com.learning.bikes.enumeration.Bike.{CustomerNumber, Timestamp}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql.functions.{avg, col, desc, lag, max, rank, window}
+import org.apache.spark.sql.functions.{avg, col, dense_rank, desc, lag, max, rank, window}
 
 object CustomWindow {
 
@@ -11,6 +11,16 @@ object CustomWindow {
   private val PRICE = "Price"
   private val PRODUCT = "Product"
 
+  /**
+   * +------+----------+----+----------+
+   * |salary|row_number|rank|dense_rank|
+   * +------+----------+----+----------+
+   * |  3000|         1|   1|         1|
+   * |  3000|         2|   1|         1|
+   * |  4100|         3|   3|         2|
+   * |  4100|         4|   3|         2|
+   * +------+----------+----+----------+
+   * */
   def getCategorizedRank(products: DataFrame): DataFrame = {
 
     val windowSpec = Window
@@ -35,6 +45,19 @@ object CustomWindow {
     products
       .na.drop() // if no args passed then by default it's "any" which means wherever null is remove that row
       .withColumn("avg_price", avg(PRICE).over(windowSpec))
+  }
+
+  def findFirstTwoCostliestFromCategory(products: DataFrame): DataFrame = {
+
+    val windowSpec = Window
+      .partitionBy(CATEGORY)
+      .orderBy(desc(PRICE))
+
+    products
+      .na.drop()
+      .withColumn("dense_rank", dense_rank.over(windowSpec))
+      .filter(col("dense_rank") <= 2)
+      .drop("dense_rank")
   }
 
   def findPriceDifferenceFromCostliestInCategory(products: DataFrame): DataFrame = {

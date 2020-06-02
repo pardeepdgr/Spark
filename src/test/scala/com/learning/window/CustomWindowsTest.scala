@@ -27,6 +27,10 @@ class CustomWindowsTest extends TestBootstrap {
     CustomWindow.getMovingAverage(products)
   }
 
+  it should "find first two costliest product in the category" in {
+    CustomWindow.findFirstTwoCostliestFromCategory(products).show(false)
+  }
+
   it should "find how much product is cheaper from its costliest product in the category" in {
     CustomWindow.findPriceDifferenceFromCostliestInCategory(products)
   }
