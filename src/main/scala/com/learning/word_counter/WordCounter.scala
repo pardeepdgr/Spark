@@ -1,4 +1,4 @@
-package com.learning.counter
+package com.learning.word_counter
 
 import com.learning.spark.SparkInstance.session
 
