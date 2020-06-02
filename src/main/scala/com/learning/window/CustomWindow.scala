@@ -17,6 +17,7 @@ object CustomWindow {
       .orderBy(desc(PRICE))
 
     products
+      .na.drop("all") // by default it's "any" if no args passed; "all" means all-columns in a row is null
       .withColumn("rank", rank.over(windowSpec))
   }
 
@@ -31,11 +32,12 @@ object CustomWindow {
       .rowsBetween(PREVIOUS_ROW, CURRENT_ROW)
 
     products
+      .na.drop()
       .withColumn("avg_price", avg(PRICE).over(windowSpec))
   }
 
   def findPriceDifferenceFromCostliestInCategory(products: DataFrame): DataFrame = {
-    val allProducts = products
+    val cleansedProducts = products
       .na.fill("Mobile") // automatically infer column-type and replace null for all string type columns
       .na.fill(0) // replace null for all number type columns with 0
 
@@ -44,8 +46,8 @@ object CustomWindow {
       .orderBy(desc(PRICE))
       .rangeBetween(Int.MinValue, Int.MaxValue)
 
-    allProducts
-      .withColumn("cheaper_than_costliest_in_category", max(PRICE).over(windowSpec) - allProducts(PRICE))
+    cleansedProducts
+      .withColumn("cheaper_than_costliest_in_category", max(PRICE).over(windowSpec) - cleansedProducts(PRICE))
   }
 
   def findDuplicateProducts(products: DataFrame): DataFrame = {
