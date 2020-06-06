@@ -3,7 +3,7 @@ package com.learning.bikes
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
 import com.learning.helper.DataFrameComparator.compareContent
-import com.learning.helper.DataFrameCreator.fromCsv
+import com.learning.creator.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 
 class CustomerAverageAggregatorTest extends TestBootstrap {

@@ -2,8 +2,8 @@ package com.learning.rdd
 
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
-import com.learning.helper.DataFrameCreator.fromRdd
-import com.learning.helper.RDDCreator.{fromCsv, fromRows}
+import com.learning.creator.DataFrameCreator.fromRdd
+import com.learning.creator.RDDCreator.{fromCsv, fromRows}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row}

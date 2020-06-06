@@ -4,7 +4,7 @@ import base.TestBootstrap
 import org.apache.spark.sql.DataFrame
 import base.TestSetup.{init, kill, session}
 import com.learning.helper.DataFrameComparator._
-import com.learning.helper.DataFrameCreator.fromCsv
+import com.learning.creator.DataFrameCreator.fromCsv
 
 class DataFrameComparatorTest extends TestBootstrap {
   private val AIRLINES = "src/test/resources/airlines/airlines.csv"

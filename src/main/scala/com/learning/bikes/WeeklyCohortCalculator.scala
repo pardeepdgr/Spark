@@ -5,7 +5,7 @@ import java.util.Date
 
 import com.learning.bikes.enumeration.Bike.CustomerNumber
 import com.learning.bikes.enumeration.Bike.Derived.{Week, WeekNumber}
-import com.learning.helper.DataFrameCreator
+import com.learning.creator.DataFrameCreator
 import org.apache.spark.sql.types.{StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 

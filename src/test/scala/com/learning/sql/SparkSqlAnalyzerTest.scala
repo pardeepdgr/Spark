@@ -2,7 +2,7 @@ package com.learning.sql
 
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
-import com.learning.helper.DataFrameCreator.fromCsv
+import com.learning.creator.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 
 class SparkSqlAnalyzerTest extends TestBootstrap {
