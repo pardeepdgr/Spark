@@ -1,7 +1,7 @@
 package com.learning.helper
 
 import org.apache.spark.sql.{Column, DataFrame}
-import org.apache.spark.sql.functions.array_contains
+import org.apache.spark.sql.functions.{array, array_contains}
 
 object DataFrameAssistant {
 
@@ -21,4 +21,9 @@ object DataFrameAssistant {
   def doesValueExistsInArrayCol(col: Column, value: String): Column = {
     array_contains(col, value)
   }
+
+  def combineTwoColumns(df: DataFrame, col: Array[String]): DataFrame = {
+    df.withColumn("col_arr", array(df(col(0)), df(col(1)))) // or struct api can be used
+  }
+
 }

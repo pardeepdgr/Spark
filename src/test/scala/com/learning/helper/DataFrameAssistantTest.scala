@@ -3,7 +3,7 @@ package com.learning.helper
 import base.TestBootstrap
 import base.TestSetup.init
 import com.learning.SparkInstance.session.implicits._
-import com.learning.helper.DataFrameAssistant.doesValueExistsInArrayCol
+import com.learning.helper.DataFrameAssistant.{combineTwoColumns, doesValueExistsInArrayCol}
 
 class DataFrameAssistantTest extends TestBootstrap {
 
@@ -18,6 +18,12 @@ class DataFrameAssistantTest extends TestBootstrap {
 
     df.withColumn("c2", doesValueExistsInArrayCol(df("c1"), "ab")).show() // false
     df.withColumn("c2", doesValueExistsInArrayCol(df("c1"), "abc")).show() // true
+  }
+
+  it should "combine 2 column into a new third column" in {
+    val df = Seq(("abc", "xyz")).toDF("c1", "c2")
+
+    combineTwoColumns(df, Array("c1", "c2")).show()
   }
 
 }
