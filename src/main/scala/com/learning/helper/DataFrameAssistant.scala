@@ -26,4 +26,9 @@ object DataFrameAssistant {
     df.withColumn("col_arr", array(df(col(0)), df(col(1)))) // or struct api can be used
   }
 
+  def toUpper(): String => String = {
+    val toUpper: String => String = s => s.toUpperCase
+    toUpper //register it with spark session initialization
+  }
+
 }
