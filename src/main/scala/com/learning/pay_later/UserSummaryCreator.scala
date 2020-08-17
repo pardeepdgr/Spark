@@ -4,7 +4,7 @@ import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions.{col, desc, row_number}
 import org.apache.spark.sql.{DataFrame, Dataset, Row}
 
-case object UserSummaryCreator {
+object UserSummaryCreator {
 
   def create(user: DataFrame, transaction: DataFrame, repayment: DataFrame): DataFrame = {
 
