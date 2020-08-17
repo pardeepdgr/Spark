@@ -20,7 +20,7 @@ class UserSummaryCreatorTest extends TestBootstrap {
     val repayment = fromCsv(session, "src/test/resources/pay_later/repayments.csv")
 
     val actualDf = UserSummaryCreator.create(userSummary, transaction, repayment)
-    val expectedDf = fromCsv(session, "src/test/resources/pay_later/user_summary.csv")
+    val expectedDf = fromCsv(session, "src/test/resources/pay_later/out/user_summary.csv")
 
     val isSameContent = compareContent(expectedDf, actualDf)
     assert(isSameContent)
