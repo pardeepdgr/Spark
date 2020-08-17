@@ -1,4 +1,4 @@
-package com.learning.word_counter
+package com.learning.partitioning
 
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}

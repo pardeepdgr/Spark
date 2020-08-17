@@ -1,4 +1,4 @@
-package com.learning.word_counter
+package com.learning.partitioning
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{HashPartitioner, Partitioner, RangePartitioner}
