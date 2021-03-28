@@ -50,6 +50,13 @@ object Joiner {
     fatDf.join(broadcast(leanDf), columnName)
   }
 
+  /** Combines DataFrames with same number of columns regardless of column name and duplicate data.
+   * If number of columns are not the same it returns an AnalysisException.
+   * To enforce matching column name use unionByName but column name should be same otherwise AnalysisException.*/
+  def union(left: DataFrame, right: DataFrame): DataFrame = {
+    left.union(right)
+  }
+
   /** spark.sql.crossJoin.enabled setting need to be set true */
   def crossJoin(left: DataFrame, right: DataFrame, columnName: String): DataFrame = {
     left.join(right)
