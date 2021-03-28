@@ -62,4 +62,15 @@ object Joiner {
     left.join(right)
   }
 
+  def joinWithoutCommonColumn(left:DataFrame, right: DataFrame): DataFrame = {
+    import org.apache.spark.sql.functions.{col, monotonically_increasing_id}
+
+    val df1 = left.withColumn("m_id", monotonically_increasing_id)
+    val df2 = right.withColumn("m_id", monotonically_increasing_id)
+
+    df1
+      .join(df2, col("m_id"))
+      .drop("m_id")
+  }
+
 }
