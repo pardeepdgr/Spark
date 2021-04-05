@@ -5,7 +5,7 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions.{avg, col, dense_rank, desc, lag, max, rank, window}
 
-object CustomWindow {
+object WindowOperation {
 
   private val CATEGORY = "Category"
   private val PRICE = "Price"

@@ -5,7 +5,7 @@ import base.TestSetup.{init, kill, session}
 import com.learning.creator.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 
-class CustomWindowsTest extends TestBootstrap {
+class WindowsTestOperation extends TestBootstrap {
 
   private val PRODUCTS = "src/test/resources/products/product.csv"
   private val BIKES = "src/test/resources/bikes/raw/bikes.csv"
@@ -14,33 +14,33 @@ class CustomWindowsTest extends TestBootstrap {
   private var bikes: DataFrame = _
 
   before {
-    init("CustomWindowsTest", "local")
+    init("WindowsTestOperation", "local")
     products = fromCsv(session, PRODUCTS)
     bikes = fromCsv(session, BIKES)
   }
 
   it should "get category wise rank for all products in descending price" in {
-    CustomWindow.getCategorizedRank(products)
+    WindowOperation.getCategorizedRank(products)
   }
 
   it should "get moving average price for current and previous product" in {
-    CustomWindow.getMovingAverage(products)
+    WindowOperation.getMovingAverage(products)
   }
 
   it should "find first two costliest product in the category" in {
-    CustomWindow.findFirstTwoCostliestFromCategory(products).show(false)
+    WindowOperation.findFirstTwoCostliestFromCategory(products).show(false)
   }
 
   it should "find how much product is cheaper from its costliest product in the category" in {
-    CustomWindow.findPriceDifferenceFromCostliestInCategory(products)
+    WindowOperation.findPriceDifferenceFromCostliestInCategory(products)
   }
 
   it should "find duplicate products" in {
-    CustomWindow.findDuplicateProducts(products)
+    WindowOperation.findDuplicateProducts(products)
   }
 
   it should "create time buckets for everyday with one hour sliding duration and window start after one minute" in {
-    CustomWindow.timeWindowBucketing(bikes.filter(bikes("number") === "14626")).show(100, false)
+    WindowOperation.timeWindowBucketing(bikes.filter(bikes("number") === "14626")).show(100, false)
   }
 
   after {
