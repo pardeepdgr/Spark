@@ -2,7 +2,7 @@ package com.learning.helper
 
 import org.apache.spark.sql.DataFrame
 
-object Joiner {
+object JoinHelper {
 
   /** If join type is not mentioned then Spark api calls inner join under the hood */
   def equiJoin(left: DataFrame, right: DataFrame, columnName: String): DataFrame = {

@@ -3,14 +3,14 @@ package com.learning.helper
 import base.TestBootstrap
 import base.TestSetup.{init, kill}
 import com.learning.helper.DataFrameComparator.compareContent
-import com.learning.helper.Dates.{currentEpoch, currentTimestamp, toDate, toEpoch, toTimestamp}
+import com.learning.helper.DateHelper.{currentEpoch, currentTimestamp, toDate, toEpoch, toTimestamp}
 import com.learning.SparkInstance.session.implicits._
 import org.apache.spark.sql.functions.col
 
-class DatesTest extends TestBootstrap {
+class DateHelperTest extends TestBootstrap {
 
   before {
-    init("DatesTest", "local")
+    init("DateHelperTest", "local")
   }
 
   behavior of "Operations on Date"

@@ -3,7 +3,7 @@ package com.learning.df
 import base.TestBootstrap
 import base.TestSetup.{init, kill, session}
 import com.learning.df.AirTrafficController.getActualAirTime
-import com.learning.helper.DataFrameAssistant.castColumnTo
+import com.learning.helper.DataFrameHelper.castColumnTo
 import com.learning.creator.DataFrameCreator.fromCsv
 import org.apache.spark.sql.DataFrame
 

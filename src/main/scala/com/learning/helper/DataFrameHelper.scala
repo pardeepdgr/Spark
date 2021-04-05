@@ -3,7 +3,7 @@ package com.learning.helper
 import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.functions.{array, array_contains}
 
-object DataFrameAssistant {
+object DataFrameHelper {
 
   def showPhysicalPlan(dataFrame: DataFrame) = {
     dataFrame.explain()

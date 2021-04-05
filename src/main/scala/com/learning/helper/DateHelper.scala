@@ -3,7 +3,7 @@ package com.learning.helper
 import org.apache.spark.sql.Column
 import org.apache.spark.sql.functions.{current_timestamp, to_date, to_timestamp, unix_timestamp}
 
-object Dates {
+object DateHelper {
 
   def currentEpoch(): Column = {
     unix_timestamp

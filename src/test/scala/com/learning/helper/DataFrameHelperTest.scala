@@ -4,16 +4,16 @@ import base.TestBootstrap
 import base.TestSetup.init
 import com.learning.SparkInstance.session.implicits._
 import com.learning.SparkInstance.upper
-import com.learning.helper.DataFrameAssistant.{combineTwoColumns, doesValueExistsInArrayCol}
+import com.learning.helper.DataFrameHelper.{combineTwoColumns, doesValueExistsInArrayCol}
 import com.learning.helper.DataFrameComparator.compareContent
 
-class DataFrameAssistantTest extends TestBootstrap {
+class DataFrameHelperTest extends TestBootstrap {
 
   before {
-    init("DataFrameAssistantTest", "local")
+    init("DataFrameHelperTest", "local")
   }
 
-  behavior of "DataFrameAssistantTest"
+  behavior of "DataFrameHelperTest"
 
   it should "doesValueExistsInArrayCol" in {
     val df = Seq(Seq("abc", "xyz")).toDF("c1")
