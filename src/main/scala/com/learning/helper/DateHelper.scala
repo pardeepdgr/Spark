@@ -1,7 +1,8 @@
 package com.learning.helper
 
 import org.apache.spark.sql.Column
-import org.apache.spark.sql.functions.{current_timestamp, to_date, to_timestamp, unix_timestamp}
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.types.LongType
 
 object DateHelper {
 
@@ -37,6 +38,17 @@ object DateHelper {
 
   def toTimestamp(timestampString: Column): Column = {
     to_timestamp(timestampString)
+  }
+
+  /** date = 2021-04-17 from csv it automatically get converted to 2021-04-17 00:00:00 due to inferSchema option
+   * time = 01:01:00 */
+  def toTimestamp(date: Column, time: Column): Column = {
+    to_timestamp(concat(substring(date, 1, 11), time))
+  }
+
+  /* timestamp format 2021-04-17 00:00:00 */
+  def diffInHour(endTimeStamp: Column, startTimeStamp: Column): Column = {
+    (endTimeStamp.cast(LongType) - startTimeStamp.cast(LongType)) / 3600
   }
 
 }
