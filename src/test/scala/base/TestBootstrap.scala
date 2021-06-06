@@ -1,6 +1,7 @@
 package base
 
-import org.scalatest.{BeforeAndAfter, FlatSpec, Matchers}
-import org.scalatestplus.mockito.MockitoSugar
+import org.scalatest.BeforeAndAfter
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-abstract class TestBootstrap extends FlatSpec with Matchers with BeforeAndAfter with MockitoSugar
+abstract class TestBootstrap extends AnyFlatSpec with Matchers with BeforeAndAfter

@@ -11,11 +11,13 @@ repositories {
 }
 
 dependencies {
-
     implementation "org.apache.spark:spark-sql_$artifactScalaVersion:$sparkVersion"
     implementation "org.apache.spark:spark-core_$artifactScalaVersion:$sparkVersion"
     implementation "org.apache.spark:spark-hive_$artifactScalaVersion:$sparkVersion"
 
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.6.2"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:5.6.2"
+    testImplementation "org.scalatest:scalatest_$artifactScalaVersion:3.2.9"
 }
 
 test {
